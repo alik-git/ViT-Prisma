@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import unittest
 from torchvision import datasets, transforms
 from torch.nn import CrossEntropyLoss
@@ -29,3 +30,5 @@ class TestTrainingFunction(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+=======
+>>>>>>> 5aa3cc480bb45eabad8b537279308217832d64fa
