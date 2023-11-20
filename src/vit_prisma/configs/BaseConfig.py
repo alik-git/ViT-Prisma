@@ -1,19 +1,18 @@
 from dataclasses import dataclass
 from vit_prisma.models.layers.transformer_block import TransformerBlock
 import torch.nn as nn
-from vit_prisma.configs.BaseConfig import BaseConfig
 
 @dataclass
 class ImageConfig:
-    image_size: int = 28
-    patch_size: int = 7
+    image_size: int = 64
+    patch_size: int = 8
     n_channels: int = 1
 
 @dataclass
 class TransformerConfig:
     hidden_dim: int = 128
     num_heads: int = 4
-    num_layers: int = 4
+    num_layers: int = 1
     block_fn = TransformerBlock
     mlp_dim: int = hidden_dim * 4  # Use a computed default
     activation_name: str = 'GELU'
@@ -42,25 +41,25 @@ class InitializationConfig:
 @dataclass
 class TrainingConfig:
     loss_fn_name: str = "CrossEntropy"
-    lr: float = 1e-4
-    num_epochs: int = 5
-    batch_size: int = 64
+    lr: float = 1e-4 
+    num_epochs: int = 50000
+    batch_size: int = 128 # set to -1 to denote whole batch
     warmup_steps: int = 10
-    weight_decay: float = 0.0
-    max_grad_norm = None
+    weight_decay: float = 0.01
+    max_grad_norm = 1.0
     device: str = 'cuda'
     seed: int = 0
     optimizer_name: str = "AdamW"
-    scheduler_step: int = 1200
-    scheduler_gamma: float = .8
+    scheduler_step: int = 200
+    scheduler_gamma: float = 0.8
 
 @dataclass
 class LoggingConfig:
     log_dir: str = 'logs'
-    log_frequency: int = 10
+    log_frequency: int = 1
     print_every: int = 0
     use_wandb: bool = True
-    wandb_project_name = 'mnist_test'
+    wandb_project_name = 'dsprites'
 
 @dataclass
 class SavingConfig:
@@ -70,11 +69,11 @@ class SavingConfig:
     save_cp_frequency: int = 10
 
 class ClassificationConfig:
-    num_classes: int = 10
+    num_classes: int = 3
     global_pool: bool = False
 
 @dataclass
-class GlobalConfig(BaseConfig):
+class BaseConfig:
     image: ImageConfig = ImageConfig()
     transformer: TransformerConfig = TransformerConfig()
     layernorm: LayerNormConfig = LayerNormConfig()
